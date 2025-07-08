@@ -1,0 +1,20 @@
+# Ignore environment and dependency files
+.env
+poetry.lock
+
+# Ignore Python cache and build files
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+
+
+# Ignore VS Code config and OS-specific files
+.vscode/
+.DS_Store
+Thumbs.db
