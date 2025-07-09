@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "fullstack-data-engineer"
+name = "learning-spark-2nd-edition"
 version = "0.1.0"
-description = "Take-home assignment with PySpark, Delta Lake, and Azure integration"
+description = "Learning Spark, 2nd Edition"
 authors = ["Nayana Holanda <holanda.nayana@gmail.com>"]
 readme = "README.md"
 packages = [{ include = "src" }]
