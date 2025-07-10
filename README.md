@@ -332,3 +332,53 @@ from pyspark.sql.functions import col
 
 spark.read.text("README.md").filter(col("value").contains("Spark")).count()
 ```
+
+Note that the code above gets the `Total number of lines containing the word Spark`, not the number of occurrences.
+
+## Narrow and Wide Transformations
+
+As noted, transformations are operations that Spark evaluates lazily. A huge advantage of the lazy evaluation scheme is that Spark can inspect your computational query and ascertain how it can optimize it. This optimization can be done by either joining or pipelining some operations and assigning them to a stage, or breaking them into stages by determining which operations require a shuffle or exchange of data across clusters.
+
+Transformations can be classified as having either **narrow dependencies** or **wide dependencies**. Any transformation where a single output partition can be computed from a single input partition is a narrow transformation. For example, in the previous code snippet, `filter()` and `contains()` represent narrow transformations because they can operate on a single partition and produce the resulting output partition without any exchange of data.
+
+However, transformations such as `groupBy()` or `orderBy()` instruct Spark to perform wide transformations, where data from other partitions is read in, combined, and written to disk. If we were to sort the `filtered` DataFrame from a preceding example by calling `.orderBy()`, each partition will be locally sorted, but we need to force a shuffle of data from each of the executor's partitions across the cluster to sort all of the records. In contrast to narrow transformations, wide transformations require output  from other partitions to compute the final aggregation.
+
+![alt text](https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492050032/files/assets/lesp_0207.png)
+
+## The Spark UI
+
+Spark includes a [graphical user interface ](https://spark.apache.org/docs/latest/web-ui.html) that you can use to inspect or monitor Spark applications in their various stages of decomposition - that is jobs, stages and tasks. Depending on how Spark is deployed, the driver launches a Web UI, running by default on port 4040, where you can view metrics details such as:
+
+* a list of scheduler stages and tasks
+* a summary of RDD sizes and memory usage
+* information about the environment
+* information about the running executors
+* All the Spark SQL queries
+
+In local mode, you can access this interface at [http://localhost:4040/](http://<localhost>:4040) in a web browser.
+
+> When you launch `spark-shell`, part of the output shows the localhost URL to access at port 4040.
+
+Let’s inspect how the Python example from the previous section translates into jobs, stages, and tasks. To view what the DAG looks like, click on “DAG Visualization” in the web UI. As image shows, the driver created a single job and a single stage.
+
+![The DAG for our simple Python example](https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492050032/files/assets/lesp_0208.png)
+
+Notice that there is no **Exchange**, where data is exchanged between executors, required because there is only a single stage. The individual operations of the stage are shown in blue boxes.
+
+Stage 0 is comprised of one task. If you have multiple tasks, they will be executed in parallel. You can view the details of each stage in the Stages tab, as shown in image.
+
+![alt text](https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492050032/files/assets/lesp_0209.png)
+
+> The UI provides a microscopic lens into Spark’s internal workings as a tool for debugging and inspecting.
+
+## Databricks Community Edition
+
+Databricks is a company that offers a managed Apache Spark platform in the cloud. In addition to running Spark locally on your own machine, you can try many of the examples in this and other chapters using the **Databricks Free Tier** — the modern replacement for the now-deprecated **Community Edition**. The Free Tier provides temporary access to a full-featured Databricks environment, including support for Python, R, Scala, SQL, Delta Lake, and machine learning workflows. It also includes tutorials, sample datasets, and notebooks, making it ideal for experimentation and learning. You can write your own notebooks or import others, including Jupyter notebooks, and take advantage of collaborative features and cloud-backed compute.
+
+[Databricks Free Edition](https://www.databricks.com/learn/free-edition)
+
+## Your First Standalone Application
+
+### Counting M&Ms for the Cookie Monster
+
+
