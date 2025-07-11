@@ -1,6 +1,9 @@
 notebook:
 	jupyter notebook notebooks/
 
+cookie_monster:
+	python src/scripts/mnmcount.py data/raw/chapter_2/mnm_dataset.csv
+
 lint:
 	poetry run flake8 .
 

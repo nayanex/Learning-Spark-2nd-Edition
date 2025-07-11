@@ -381,4 +381,138 @@ Databricks is a company that offers a managed Apache Spark platform in the cloud
 
 ### Counting M&Ms for the Cookie Monster
 
+See below some detailed explanation about the script:
 
+```python
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
+        # python mnmcount.py 2> error.log
+        print("Usage: mnmcount <file>", file=sys.stderr)
+        sys.exit(-1)
+```
+
+1. if `__name__ == "__main__"`:
+
+* **What it does:** This line checks if the Python script is being run directly (not being imported as a module in another script).
+
+* **How it works:** When a Python file is run, Python sets a special variable called `__name__`. If the file is being run directly (not imported), `__name__` is set to `"__main__"`.
+
+* **Why it's used:** This allows the code inside this block to run only when the script is executed directly, and not when it is imported as part of another script.
+
+
+2. `if len(sys.argv) != 2`:
+
+* **What it does:** This checks if the number of command-line arguments passed to the script is **exactly 2**.
+
+* **How it works:** When you run a Python script from the command line, you can pass in arguments (like filenames, numbers, etc.) after the script name. These arguments are stored in the `sys.argv` list. The first element (`sys.argv[0]`) is always the script name, and the other elements are the arguments passed in.
+
+* **Why it's used:** If you are expecting the user to provide exactly **one argument** (besides the script name), this line checks whether the user provided it. If not, the script will print an error message.
+
+3. `print("Usage: mnmcount <file>", file=sys.stderr)`
+
+* **What it does:** If the condition `len(sys.argv) != 2` is true (meaning the user did not provide exactly one argument), this line prints a helpful error message to the standard error stream (`stderr`).
+
+* **How it works:** `file=sys.stderr` tells Python to print the message to `stderr`, which is typically used for error messages, rather than the standard output (`stdout`).
+
+* **Why it's used:** It provides the user with guidance on how to properly run the script. It tells them that the script expects a file argument.
+
+4. `sys.exit(-1)`
+
+* **What it does:** This causes the script to stop running and exit with an error code of `-1`.
+
+* **How it works:** `sys.exit()` is used to exit from the program, and the number passed in (`-1` in this case) is the exit status. A non-zero exit status (like `-1`) indicates an error occurred.
+
+* **Why it's used:** If the user doesn't provide the right number of arguments, the script will stop immediately with an error code.
+
+If you **don't provide exactly one argument**, it will show an error message like:
+
+`Usage: mnmcount.py <file>`
+
+and then it will exit with an error code (`-1`).
+
+Correct usage:
+
+`python mnmcount.py somefile.txt`
+
+### Why use `sys.stderr` for errors?
+
+* `sys.stderr` is a **special stream** used for **error messages** in Python. It's part of the `sys` module, which provides access to system-specific parameters and functions.
+
+* By default, Python prints regular output (like `print()`) to the standard output stream (`sys.stdout`), which is usually your terminal or console.
+
+* However, **error messages** are often sent to a separate stream, called **standard error** (`sys.stderr`), so they can be treated differently from regular output. For example, you can redirect errors to a file or handle them separately from regular output.
+
+* Using `stderr` for errors is a good practice because it keeps error messages separate from regular output. This way, if you're running scripts or commands in a pipeline, errors won't get mixed with normal results.
+
+* It also gives the user or system administrator more flexibility to manage errors, such as logging them into a separate file.
+
+The `print()` function by default prints to sys.stdout (standard output). However, you can change the output destination by using the `file` parameter. By specifying `file=sys.stderr`, you're telling Python to send the output to the **error stream** instead of the regular output.
+
+Here's a simple example showing the difference between printing to `stdout` and `stderr`:
+
+```python
+import sys
+
+# Printing to standard output (stdout)
+print("This is normal output.")
+
+# Printing to standard error (stderr)
+print("This is an error message.", file=sys.stderr)
+```
+
+* **Normal output** (`"This is normal output."`) will appear in the terminal.
+
+* **Error message** ("`This is an error message."`) will be saved in the file error.log.
+
+Now, if you check the contents of `error.log`:
+
+```bash
+cat error.log
+```
+
+You will see: `This is an error message.`
+
+#### What happens when you run the above code?
+
+The first message will be printed to your terminal, as usual.
+
+The second message will be printed to **stderr**. In most systems, this means it will appear in the terminal as well, but you can easily **redirect stderr** to a file using shell redirection.
+
+For example, if you run:
+
+```bash
+python script.py 2> error.log
+```
+
+It will redirect anything printed to **stderr** (the error message) to a file called `error.log`.
+
+
+The `2>` in the command `python mnmcount.py 2> error.log` is a **shell redirection** operator that redirects **standard error (stderr)** to a file.
+
+#### `2>`: Redirecting standard error
+
+* `2` represents **file descriptor 2**, which is the file descriptor for **standard error (stderr)** in Unix-like systems (including Linux and macOS).
+
+* `>` is the redirection operator. It tells the shell to redirect the output to a file, instead of printing it to the terminal.
+
+### File Descriptors in Unix-like Systems:
+
+* `1>`: Standard output (`stdout`), which is used for normal output, such as what `print()` sends.
+
+* `2>`: Standard error (`stderr`), which is used for error messages.
+
+If you use just `>` (without the 2), it redirects the standard output:
+
+```bash
+python mnmcount.py > output.log
+```
+
+### Problem Statement
+
+Jeronima is a data Scientist who loves baking cookies with M&Ms in them, and she rewards her students in the US states where she frequently teaches Machine Learning and Data Science courses with batches of those cookies. But she;s data-driven, obviously, and wants to ensure that she gets the right colors of M&Ms in the cookies for students in the different states.
+
+![Distribution of M&Ms by color](https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492050032/files/assets/lesp_0211.png)
+
+Let's solve it using Spark's distribution functionality and DataFrame APIs.
+
+Let’s write a Spark program that reads a file with over 100,000 entries (where each row or line has a `<state, mnm_color, count>`) and computes and aggregates the counts for each color and state. These aggregated counts tell us the colors of M&Ms favored by students in each state.
