@@ -34,7 +34,7 @@ The community of Spark developers maintains a list of third-party spark packages
 
 ## What are Apache Spark Components as a Unified stack?
 
-Spark offers 4 distinct components as libraries for diverse workloads: Spark SQL, Spark MLlib, Spark Streaming and Graph X. Each of these components is separate from Spark's core fault-tolerant engine, in that you use your APIs to write your Spark application and Spark converts this into a DAG that is executed by the core engine. The underlying code id decomposed into highly compact bytecode that is executed in the workers's JVMs across the cluster.
+Spark offers 4 distinct components as libraries for diverse workloads: Spark SQL, Spark MLlib, Spark Streaming and Graph X. Each of these components is separate from Spark's core fault-tolerant engine, in that you use your APIs to write your Spark application and Spark converts this into a DAG that is executed by the core engine. The underlying code is decomposed into highly compact bytecode that is executed in the workers's JVMs across the cluster.
 
 ![alt text](https://learning.oreilly.com/api/v2/epubs/urn:orm:book:9781492050032/files/assets/lesp_0103.png)
 
@@ -129,33 +129,9 @@ Data engineers use Spark to parallelize computations and it hides all the comple
 * Analyzing graph data sets and social networks
 
 
-## Talk about its architecture
-
-## What are the advantages of using it, what are the adjectives that you would use?
-
-Think of:
-
-* scale
-
-
-## What are some ways of programming? Example: Functional, Declarative, Imperative.
-
-
-## Can you talk about MapReduce?
-
-## What's the difference between and Data Scientist and Data Engineer?
-
-
-
 ## My Observations
 
 - I find Spark easy to use, there is very little boilerplate, it's simple and well designed, easy to manage, has good fault tolerance, it has SQL-like queries, pandas-like flavors... and most importantly, it's FAST!
-
-
-## What does it mean to have good fault-tolerance?
-
-
-## What is batch processing?
 
 
 ## When to use monorepo? What's the advantage of it?
@@ -198,8 +174,6 @@ ok. Now you are ready to use Spark interpretive shells locally.
 ## Using the Local Machine
 
 Spark computations are expressed as operations. These operations are then converted into low-level RDD-based bytecode as tasks, which are distributed to Spark's executors for execution.
-
-Let's see an example illustrating the use of the high-level Structured APIs. In it we read in a text file as a DataFrame, show a sample of the strings read, and count the total number of lines in the file. The `show(10, false)` operation on the DataFrame only displays the first 10 lines without truncating; by default the `truncate` Boolean flag is `true`.
 
 To exit any of the Spark shells, press `Ctrl-D`. As you can see, this rapid interactivity with Spark shells is conducive not only to rapid  learning, but to rapid prototyping, too.
 
@@ -260,7 +234,7 @@ Let’s dig into these concepts in a little more detail.
 
 At the core of every Spark application is the Spark driver program, which creates a `SparkSession` object. When you're working with a Spark shell, the driver is part of the shell and the `SparkSession` object (accessible via the variable `spark`) is created for you.
 
-In previous example, because you launched the Spark shell locally on your laptop, all the operations ran locally, in a single JVM. But you can just as easily launch s Spark shell to analyze data in parallel on a cluster as in local mode.  The commands `spark-shell --help` or `pyspark --help` will show you how to connect to the Spark cluster manager.
+In previous example, because you launched the Spark shell locally on your laptop, all the operations ran locally, in a single JVM. But you can just as easily launch a Spark shell to analyze data in parallel on a cluster as in local mode.  The commands `spark-shell --help` or `pyspark --help` will show you how to connect to the Spark cluster manager.
 
 Spark components communicate through the Spark driver in Spark’s distributed architecture:
 

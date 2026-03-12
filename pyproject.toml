@@ -1,47 +1,53 @@
-[tool.poetry]
+[project]
 name = "learning-spark-2nd-edition"
 version = "0.1.0"
 description = "Learning Spark, 2nd Edition"
-authors = ["Nayana Holanda <holanda.nayana@gmail.com>"]
+authors = [{ name = "Nayana Holanda", email = "holanda.nayana@gmail.com" }]
+requires-python = ">=3.12,<4"
 readme = "README.md"
-packages = [{ include = "src" }]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+    "python-dotenv>=1.0.1,<2",
+    "pyspark>=4.0.0",
+    "delta-spark>=4.0.0",
+    "pyarrow>=19.0.1",
+    "pandas>=2.2.3,<3",
+    "azure-storage-blob>=12.19.0,<13",
+    "requests>=2.31.0,<3",
+    "findspark>=2.0.1,<3",
+    "databricks-cli>=0.18.0,<0.19",
+    "ipykernel>=6.29.5,<7",
+    "notebook>=7.4.2,<8",
+    "jupyterlab>=4.3.4,<5",
+    "sqlalchemy>=2.0.41,<3",
+    "psycopg2-binary>=2.9.10,<3",
+    "matplotlib>=3.10.0,<4",
+]
 
-[tool.poetry.dependencies]
-python = "^3.12"
-python-dotenv = "^1.0.1"
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5,<7",
+    "black>=25.1.0,<26",
+    "isort>=6.0.1,<7",
+    "flake8>=7.2.0,<8",
+    "mypy>=1.15.0,<2",
+    "pre-commit>=4.2.0,<5",
+]
 
-# Core data engineering
-pyspark = "^3.5.1"
-delta-spark = "^3.0.0"
-pyarrow = "^15.0.0"
-pandas = "^2.2.1"
+[tool.uv]
+default-groups = "all"
 
-# Azure
-azure-storage-blob = "^12.19.0"
-
-# HTTP / APIs
-requests = "^2.31.0"
-
-# Optional: CLI, helpers
-findspark = "^2.0.1"
-databricks-cli = "^0.18.0"
-ipykernel = "^6.29.5"
-notebook = "^7.4.2"
-jupyterlab = "^4.4.2"
-sqlalchemy = "^2.0.41"
-psycopg2-binary = "^2.9.10"
-matplotlib = "^3.10.3"
-
-[tool.poetry.group.dev.dependencies]
-ipykernel = "^6.29.5"
-black = "^25.1.0"
-isort = "^6.0.1"
-flake8 = "^7.2.0"
-mypy = "^1.15.0"
-pre-commit = "^4.2.0"
+[tool.uv.build-backend]
+module-name = ["src"]
+module-root = ""
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
 
 
