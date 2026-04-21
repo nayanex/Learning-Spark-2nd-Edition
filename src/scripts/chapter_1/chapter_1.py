@@ -20,5 +20,6 @@ print(f"Total rows in file: {log_df.count()}")
 log_df.show(5)
 
 # And this code will create a DataFrame of 10,000 integers distributed over eight partitions in memory:
-df = spark.range(0, 10000, 1, 8)
-print(df.rdd.getNumPartitions())
+df1 = spark.range(0, 10000, 1, 8)
+print(df1.rdd.getNumPartitions())
+df1.show(5)
